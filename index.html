@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Interactiva de Carrera</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fefefe;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .ramo {
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      background-color: #e6f2ff;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .ramo.aprobado {
+      text-decoration: line-through;
+      background-color: #c8e6c9;
+      color: #555;
+    }
+    .ramo.bloqueado {
+      background-color: #f0f0f0;
+      color: #aaa;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    h2 {
+      background: #d9eaf7;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular Interactiva</h1>
+
+  <h2>Primer Ciclo</h2>
+  <div class="grid">
+    <div class="ramo" onclick="toggleAprobado(this)">Matemática I</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Comunicación</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Administración General</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Contabilidad Básica</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Introducción a los Negocios</div>
+  </div>
+
+  <h2>Segundo Ciclo</h2>
+  <div class="grid">
+    <div class="ramo" onclick="toggleAprobado(this)">Matemática II</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Economía General</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Marketing</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Gestión de Personas</div>
+    <div class="ramo" onclick="toggleAprobado(this)">Contabilidad Financiera</div>
+  </div>
+
+  <script>
+    function toggleAprobado(element) {
+      element.classList.toggle('aprobado');
+    }
+  </script>
+</body>
+</html>
