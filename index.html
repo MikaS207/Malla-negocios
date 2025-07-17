@@ -1,72 +1,222 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Malla Interactiva de Carrera</title>
+  <title>Malla Curricular Interactiva</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #fefefe;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      margin: 20px;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 12px;
+
+    h1, h2 {
+      color: #2c3e50;
     }
-    .ramo {
+
+    .leyenda {
+      background: #ecf0f1;
       padding: 10px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      background-color: #e6f2ff;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.3s;
+      margin-bottom: 20px;
+      border-left: 5px solid #3498db;
     }
-    .ramo.aprobado {
-      text-decoration: line-through;
-      background-color: #c8e6c9;
-      color: #555;
+
+    .ciclo {
+      margin-bottom: 30px;
     }
-    .ramo.bloqueado {
-      background-color: #f0f0f0;
-      color: #aaa;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-    h2 {
-      background: #d9eaf7;
-      padding: 5px 10px;
+
+    .curso {
+      padding: 8px;
+      margin: 5px;
       border-radius: 5px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      transition: background-color 0.3s;
+    }
+
+    .bloqueado {
+      background-color: #ccc;
+      color: #fff;
+      cursor: not-allowed;
+    }
+
+    .disponible {
+      background-color: #ecf0f1;
+    }
+
+    .completado {
+      background-color: #2ecc71;
+      color: white;
+      text-decoration: line-through;
+    }
+
+    .area-Finanzas {
+      border-left: 5px solid #f39c12;
+    }
+
+    .area-Marketing {
+      border-left: 5px solid #e74c3c;
+    }
+
+    .area-Contabilidad {
+      border-left: 5px solid #8e44ad;
+    }
+
+    .area-Investigacion {
+      border-left: 5px solid #16a085;
+    }
+
+    .area-Internacional {
+      border-left: 5px solid #2980b9;
+    }
+
+    .area-General {
+      border-left: 5px solid #7f8c8d;
+    }
+
+    .reiniciar {
+      margin: 10px 0;
+      padding: 10px 15px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
+
 <body>
   <h1>Malla Curricular Interactiva</h1>
-
-  <h2>Primer Ciclo</h2>
-  <div class="grid">
-    <div class="ramo" onclick="toggleAprobado(this)">Matemática I</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Comunicación</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Administración General</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Contabilidad Básica</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Introducción a los Negocios</div>
+  <div class="leyenda">
+    <strong>Leyenda:</strong> <br>
+    🔓 <span class="disponible">Disponible</span> | ⛔ <span class="bloqueado">Bloqueado</span> | ✅ <span class="completado">Completado</span>
   </div>
-
-  <h2>Segundo Ciclo</h2>
-  <div class="grid">
-    <div class="ramo" onclick="toggleAprobado(this)">Matemática II</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Economía General</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Marketing</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Gestión de Personas</div>
-    <div class="ramo" onclick="toggleAprobado(this)">Contabilidad Financiera</div>
-  </div>
-
+  <button class="reiniciar" onclick="reiniciarProgreso()">🔄 Reiniciar avance</button>
+  <div id="malla"></div>
   <script>
-    function toggleAprobado(element) {
-      element.classList.toggle('aprobado');
+    const cursos = [
+      // Ciclo 0
+      { nombre: "Nivelación de Lenguaje", ciclo: 0, requisitos: [], area: "General" },
+      { nombre: "Nivelación de Matemática", ciclo: 0, requisitos: [], area: "General" },
+      
+      // Ciclo 1
+      { nombre: "Comprensión y Producción de Lenguaje I", ciclo: 1, requisitos: ["Nivelación de Lenguaje"], area: "General" },
+      { nombre: "Fundamentos para el Cálculo", ciclo: 1, requisitos: ["Nivelación de Matemática"], area: "General" },
+      { nombre: "Fundamentos de la Investigación", ciclo: 1, requisitos: [], area: "Investigacion" },
+      { nombre: "Historia de la Globalización", ciclo: 1, requisitos: [], area: "Internacional" },
+
+      // Ciclo 2
+      { nombre: "Cálculo", ciclo: 2, requisitos: ["Fundamentos para el Cálculo"], area: "General" },
+      { nombre: "Teoría Microeconómica", ciclo: 2, requisitos: [], area: "Finanzas" },
+      { nombre: "Estadística Descriptiva", ciclo: 2, requisitos: ["Cálculo"], area: "General" },
+      { nombre: "Contabilidad Financiera", ciclo: 2, requisitos: [], area: "Contabilidad" },
+      { nombre: "INTERNATIONAL BUSINESS", ciclo: 2, requisitos: [], area: "Internacional" },
+
+      // Ciclo 3
+      { nombre: "Matemática Financiera", ciclo: 3, requisitos: ["Cálculo"], area: "Finanzas" },
+      { nombre: "COMPORTAMIENTO DEL CONSUMIDOR", ciclo: 3, requisitos: [], area: "Marketing" },
+      { nombre: "Contabilidad de Costos", ciclo: 3, requisitos: ["Contabilidad Financiera"], area: "Contabilidad" },
+      { nombre: "Investigación de Mercados", ciclo: 3, requisitos: ["Fundamentos de la Investigación"], area: "Investigacion" },
+
+      // Ciclo 4
+      { nombre: "Macroeconomía", ciclo: 4, requisitos: ["Teoría Microeconómica"], area: "Finanzas" },
+      { nombre: "Marketing", ciclo: 4, requisitos: [], area: "Marketing" },
+      { nombre: "Estadística Inferencial", ciclo: 4, requisitos: ["Estadística Descriptiva"], area: "General" },
+      { nombre: "Gestión Financiera", ciclo: 4, requisitos: ["Matemática Financiera"], area: "Finanzas" },
+
+      // Ciclo 5
+      { nombre: "Dirección de Ventas", ciclo: 5, requisitos: ["Marketing"], area: "Marketing" },
+      { nombre: "Gestión del Talento Humano", ciclo: 5, requisitos: [], area: "General" },
+      { nombre: "Comercio Internacional", ciclo: 5, requisitos: ["INTERNATIONAL BUSINESS"], area: "Internacional" },
+      { nombre: "Costos para la Toma de Decisiones", ciclo: 5, requisitos: ["Contabilidad de Costos"], area: "Contabilidad" },
+
+      // Ciclo 6
+      { nombre: "Gestión de la Cadena de Suministro", ciclo: 6, requisitos: [], area: "General" },
+      { nombre: "Finanzas Internacionales", ciclo: 6, requisitos: ["Gestión Financiera"], area: "Finanzas" },
+      { nombre: "Negociación Internacional", ciclo: 6, requisitos: ["Comercio Internacional"], area: "Internacional" },
+      { nombre: "Dirección Comercial", ciclo: 6, requisitos: ["Dirección de Ventas"], area: "Marketing" },
+
+      // Ciclo 7
+      { nombre: "Inteligencia Comercial", ciclo: 7, requisitos: ["Investigación de Mercados"], area: "Investigacion" },
+      { nombre: "Logística Internacional", ciclo: 7, requisitos: ["Gestión de la Cadena de Suministro"], area: "Internacional" },
+      { nombre: "Gestión de Marca", ciclo: 7, requisitos: ["Marketing"], area: "Marketing" },
+      { nombre: "Evaluación de Proyectos", ciclo: 7, requisitos: ["Gestión Financiera"], area: "Finanzas" },
+
+      // Ciclo 8
+      { nombre: "Gestión de la Innovación", ciclo: 8, requisitos: [], area: "General" },
+      { nombre: "Desarrollo de Nuevos Productos", ciclo: 8, requisitos: ["Gestión de Marca"], area: "Marketing" },
+      { nombre: "Consultoría Empresarial", ciclo: 8, requisitos: [], area: "General" },
+      { nombre: "Gestión Estratégica", ciclo: 8, requisitos: [], area: "General" },
+
+      // Ciclo 9
+      { nombre: "Ética Profesional", ciclo: 9, requisitos: [], area: "General" },
+      { nombre: "Formulación y Evaluación de Proyectos", ciclo: 9, requisitos: ["Evaluación de Proyectos"], area: "Finanzas" },
+      { nombre: "Seminario de Investigación Aplicada I", ciclo: 9, requisitos: ["Fundamentos de la Investigación"], area: "Investigacion" },
+
+      // Ciclo 10
+      { nombre: "Prácticas Pre Profesionales", ciclo: 10, requisitos: ["Seminario de Investigación Aplicada I"], area: "General" },
+      { nombre: "Seminario de Investigación Aplicada II", ciclo: 10, requisitos: ["Seminario de Investigación Aplicada I"], area: "Investigacion" },
+    ];
+
+    const mallaDiv = document.getElementById("malla");
+
+    function guardarEstado(nombre, estado) {
+      localStorage.setItem("curso_" + nombre, estado);
     }
+
+    function cargarEstado(nombre) {
+      return localStorage.getItem("curso_" + nombre) || "bloqueado";
+    }
+
+    function estaDisponible(curso) {
+      return curso.requisitos.every(r => cargarEstado(r) === "completado");
+    }
+
+    function renderMalla() {
+      mallaDiv.innerHTML = "";
+      const ciclos = [...new Set(cursos.map(c => c.ciclo))].sort((a, b) => a - b);
+      ciclos.forEach(ciclo => {
+        const cicloDiv = document.createElement("div");
+        cicloDiv.className = "ciclo";
+        cicloDiv.innerHTML = `<h2>Ciclo ${ciclo}</h2>`;
+
+        cursos.filter(c => c.ciclo === ciclo).forEach(curso => {
+          const estado = cargarEstado(curso.nombre);
+          const desbloqueado = estaDisponible(curso);
+          const cursoDiv = document.createElement("div");
+          cursoDiv.className = `curso area-${curso.area} ${estado}`;
+          cursoDiv.textContent = curso.nombre;
+
+          if (!desbloqueado && estado !== "completado") {
+            cursoDiv.classList.add("bloqueado");
+          } else if (estado !== "completado") {
+            cursoDiv.classList.add("disponible");
+          }
+
+          cursoDiv.onclick = () => {
+            if (!cursoDiv.classList.contains("bloqueado")) {
+              const nuevoEstado = estado === "completado" ? "disponible" : "completado";
+              guardarEstado(curso.nombre, nuevoEstado);
+              renderMalla();
+            }
+          };
+          cicloDiv.appendChild(cursoDiv);
+        });
+
+        mallaDiv.appendChild(cicloDiv);
+      });
+    }
+
+    function reiniciarProgreso() {
+      cursos.forEach(curso => localStorage.removeItem("curso_" + curso.nombre));
+      renderMalla();
+    }
+
+    renderMalla();
   </script>
 </body>
+
 </html>
